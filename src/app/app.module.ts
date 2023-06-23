@@ -1,10 +1,9 @@
+import { TypeOrmConfigModule } from 'src/database/typeorm.module';
+import { AuthModule } from '../structures/presentation/auth/auth.module';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { CommonModule } from 'src/common/common.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [CommonModule, AuthModule, TypeOrmConfigModule],
 })
 export class AppModule {}
