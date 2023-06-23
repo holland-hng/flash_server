@@ -13,6 +13,7 @@ import { UserRepository } from 'src/structures/domain/user/user.repository';
 import { AuthLoginDto } from 'src/structures/data/auth/auth_dto';
 import { AuthSectionDto } from 'src/structures/data/auth/auth_section_dto';
 import { User } from 'src/structures/domain/user/user';
+import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -34,16 +35,7 @@ export class AuthController {
   @ApiOperation({ description: 'login' })
   async login(@Body() auth: AuthLoginDto) {
     auth.email;
-    // const accessTokenCookie = await this.loginUsecaseProxy
-    //   .getInstance()
-    //   .getCookieWithJwtToken(auth.username);
-    // const refreshTokenCookie = await this.loginUsecaseProxy
-    //   .getInstance()
-    //   .getCookieWithJwtRefreshToken(auth.username);
-    // request.res.setHeader('Set-Cookie', [
-    //   accessTokenCookie,
-    //   refreshTokenCookie,
-    // ]);
+
     const response: AuthSectionDto = {
       token: 'token',
       refreshToken: 'refreshToken',
@@ -60,8 +52,17 @@ export class AuthController {
     const hashPassword = await this.bcryptService.hash(auth.password);
     const user = new User();
     user.email = auth.email;
-    const result = this.userRepository.createUser(user, hashPassword);
-
-    return result;
+    try {
+      const result = this.userRepository.createUser(user, hashPassword);
+      return result;
+    } catch (e) {
+      switch (e) {
+        case ExceptionsHandler:
+          break;
+        default:
+      }
+      // if (e instanceof ExceptionsHandler) {
+      // }
+    }
   }
 }
