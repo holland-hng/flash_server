@@ -15,28 +15,28 @@ export enum UserRole {
 
 @Entity()
 export class UserEntity {
-  @PrimaryGeneratedColumn({ type: 'integer' })
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Column('varchar', { nullable: true })
+  @Column('varchar', { nullable: true, unique: true })
   email: string;
 
-  @Column('varchar', { name: 'user_name' })
+  @Column('varchar', { nullable: true })
   userName: string;
 
   @Column('varchar', { nullable: true })
   password: string;
 
-  @Column('varchar', { name: 'phone_number' })
+  @Column('varchar', { nullable: true })
   phoneNumber: string;
 
-  @CreateDateColumn({ name: 'create_date' })
+  @CreateDateColumn()
   createDate: Date;
 
-  @UpdateDateColumn({ name: 'updated_date' })
+  @UpdateDateColumn()
   updatedDate: Date;
 
-  @Column({ nullable: true, name: 'last_login' })
+  @Column({ nullable: true })
   lastLogin?: Date;
 
   @Column({ type: 'enum', enum: UserRole })

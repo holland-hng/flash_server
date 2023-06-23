@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/structures/data/user/user.entity';
+import { UserEntity, UserRole } from 'src/structures/data/user/user.entity';
 import { User } from 'src/structures/domain/user/user';
 import { UserRepository } from 'src/structures/domain/user/user.repository';
 import { Repository } from 'typeorm';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class DatabaseUserRepository implements UserRepository {
@@ -12,7 +13,13 @@ export class DatabaseUserRepository implements UserRepository {
     private readonly userEntityRepository: Repository<UserEntity>,
   ) {}
 
-  async getUserById(userId: number): Promise<User> {
+  async createUser(user: User, password: string): Promise<UserEntity> {
+    const entity = this.toUserEntity(user, password);
+    const result = await this.userEntityRepository.save(entity, {});
+    return result;
+  }
+
+  async getUserById(userId: string): Promise<User> {
     const entity = await this.userEntityRepository.findOne({
       where: {
         id: userId,
@@ -24,7 +31,7 @@ export class DatabaseUserRepository implements UserRepository {
     return this.toUser(entity);
   }
 
-  async updateLastLogin(userId: number): Promise<void> {
+  async updateLastLogin(userId: string): Promise<void> {
     await this.userEntityRepository.update(
       {
         id: userId,
@@ -43,5 +50,21 @@ export class DatabaseUserRepository implements UserRepository {
     user.role = entity.role;
 
     return user;
+  }
+
+  private toUserEntity(user: User, password: string): UserEntity {
+    const now = new Date();
+    const entity: UserEntity = {
+      id: user.id ?? uuid(),
+      email: user.email,
+      userName: null,
+      password: password,
+      phoneNumber: '',
+      createDate: now,
+      updatedDate: now,
+      lastLogin: now,
+      role: UserRole.admin,
+    };
+    return entity;
   }
 }

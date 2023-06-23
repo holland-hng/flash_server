@@ -1,7 +1,7 @@
 import { UserRole } from 'src/structures/data/user/user.entity';
 
 export class User {
-  id: number;
+  id: string;
 
   email: string;
 
