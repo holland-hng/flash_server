@@ -1,3 +1,4 @@
+import { User } from 'src/structures/domain/user/user';
 import {
   Column,
   CreateDateColumn,
@@ -14,7 +15,7 @@ export enum UserRole {
 }
 
 @Entity()
-export class UserEntity {
+export class UserEntity implements User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -27,7 +28,7 @@ export class UserEntity {
   @Column('varchar', { nullable: true })
   password: string;
 
-  @Column('varchar', { nullable: true })
+  @Column('varchar', { nullable: true, unique: true })
   phoneNumber: string;
 
   @CreateDateColumn()
@@ -38,6 +39,9 @@ export class UserEntity {
 
   @Column({ nullable: true })
   lastLogin?: Date;
+
+  @Column('varchar', { nullable: true })
+  refreshToken: string;
 
   @Column({ type: 'enum', enum: UserRole })
   role: UserRole;

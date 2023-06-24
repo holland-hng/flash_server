@@ -31,6 +31,18 @@ export class DatabaseUserRepository implements UserRepository {
     return this.toUser(entity);
   }
 
+  async getUserByEmail(email: string): Promise<UserEntity> {
+    const entity = await this.userEntityRepository.findOne({
+      where: {
+        email: email,
+      },
+    });
+    if (!entity) {
+      return null;
+    }
+    return entity;
+  }
+
   async updateLastLogin(userId: string): Promise<void> {
     await this.userEntityRepository.update(
       {
@@ -54,17 +66,31 @@ export class DatabaseUserRepository implements UserRepository {
 
   private toUserEntity(user: User, password: string): UserEntity {
     const now = new Date();
+    const id = uuid();
     const entity: UserEntity = {
-      id: user.id ?? uuid(),
+      id: user.id ?? id,
       email: user.email,
       userName: null,
       password: password,
-      phoneNumber: '',
+      phoneNumber: 'NONE' + id,
       createDate: now,
       updatedDate: now,
       lastLogin: now,
+      refreshToken: null,
       role: UserRole.admin,
     };
     return entity;
+  }
+
+  async updateRefreshToken(
+    userId: string,
+    refreshToken: string,
+  ): Promise<void> {
+    await this.userEntityRepository.update(
+      {
+        id: userId,
+      },
+      { refreshToken: refreshToken },
+    );
   }
 }
