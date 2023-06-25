@@ -1,6 +1,6 @@
 import { UserEntity, UserRole } from 'src/structures/data/user/user.entity';
 
-export class UserPresenter {
+export class User {
   id: string;
 
   email: string;
@@ -11,8 +11,8 @@ export class UserPresenter {
 
   role: UserRole;
 
-  static fromEntity(entity: UserEntity): UserPresenter {
-    const user: UserPresenter = {
+  static fromEntity(entity: UserEntity): User {
+    const user: User = {
       id: entity.id,
       email: entity.email,
       userName: entity.userName,

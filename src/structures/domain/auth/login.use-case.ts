@@ -1,18 +1,18 @@
-import { AuthLoginDto } from 'src/structures/data/auth/auth_dto';
+import { AuthLoginDto } from 'src/structures/data/auth/auth.dto';
 import { UserEntity } from 'src/structures/data/user/user.entity';
 import {
   AccountDoseNotExist,
   WrongPasswordException,
 } from '../user/user.exception';
-import { AuthUseCase } from './auth.use_case';
-import { AuthSectionDto } from 'src/structures/data/auth/auth_section_dto';
-import { Injectable } from '@nestjs/common';
+import { AuthUseCase } from './auth.use-case';
 
+import { Injectable } from '@nestjs/common';
+import { Author } from './auth';
 export const UserRepository = Symbol('UserRepository');
 
 @Injectable()
 export class LoginUseCase extends AuthUseCase {
-  async execute(data: AuthLoginDto): Promise<AuthSectionDto> {
+  async execute(data: AuthLoginDto): Promise<Author> {
     const auth = data;
     let userEntity: UserEntity;
     try {
@@ -37,7 +37,7 @@ export class LoginUseCase extends AuthUseCase {
       jwtToken.refreshToken,
     );
 
-    const authSection: AuthSectionDto = {
+    const authSection: Author = {
       token: jwtToken.token,
       refreshToken: jwtToken.refreshToken,
       user: userEntity,

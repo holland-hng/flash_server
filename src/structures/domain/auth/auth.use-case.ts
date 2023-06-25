@@ -5,15 +5,15 @@ import { JwtTokenService } from 'src/common/jwt/jwt.service';
 import { UserRepository } from '../user/user.repository';
 import { Inject } from '@nestjs/common';
 import { UseCase } from 'src/common/use_case/use_case.interface';
-import { AuthLoginDto } from 'src/structures/data/auth/auth_dto';
-import { AuthSectionDto } from 'src/structures/data/auth/auth_section_dto';
+import { Author } from './auth';
+import { AuthLoginDto } from 'src/structures/data/auth/auth.dto';
 
 export class JWTToken {
   token: string;
   refreshToken: string;
 }
 
-export class AuthUseCase implements UseCase<AuthLoginDto, AuthSectionDto> {
+export class AuthUseCase implements UseCase<AuthLoginDto, Author> {
   constructor(
     private readonly envService: EnvironmentService,
     protected readonly jwtService: JwtTokenService,
@@ -22,7 +22,7 @@ export class AuthUseCase implements UseCase<AuthLoginDto, AuthSectionDto> {
     protected readonly userRepository: UserRepository,
   ) {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  execute(data: AuthLoginDto): Promise<AuthSectionDto | null> {
+  execute(data: AuthLoginDto): Promise<Author | null> {
     return null;
   }
 

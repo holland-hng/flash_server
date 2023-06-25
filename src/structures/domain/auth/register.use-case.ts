@@ -1,17 +1,17 @@
-import { AuthLoginDto } from 'src/structures/data/auth/auth_dto';
-import { AuthUseCase } from './auth.use_case';
-import { UserPresenter } from '../user/user.presenter';
+import { AuthLoginDto } from 'src/structures/data/auth/auth.dto';
+import { AuthUseCase } from './auth.use-case';
+import { User } from '../user/user';
 import { QueryFailedError } from 'typeorm';
 import { AccountAlreadyExistsException } from '../user/user.exception';
-import { AuthSectionDto } from 'src/structures/data/auth/auth_section_dto';
 import { Injectable } from '@nestjs/common';
+import { Author } from './auth';
 
 @Injectable()
 export class RegisterUseCase extends AuthUseCase {
-  async execute(data: AuthLoginDto): Promise<AuthSectionDto> {
+  async execute(data: AuthLoginDto): Promise<Author> {
     const auth = data;
     const hashPassword = await this.bcryptService.hash(auth.password);
-    const user = new UserPresenter();
+    const user = new User();
     user.email = auth.email;
 
     try {
@@ -21,7 +21,7 @@ export class RegisterUseCase extends AuthUseCase {
         newUser.id,
         jwtToken.refreshToken,
       );
-      const authSection: AuthSectionDto = {
+      const authSection: Author = {
         token: jwtToken.token,
         refreshToken: jwtToken.refreshToken,
         user: newUser,

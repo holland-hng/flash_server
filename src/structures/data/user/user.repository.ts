@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity, UserRole } from 'src/structures/data/user/user.entity';
-import { UserPresenter } from 'src/structures/domain/user/user.presenter';
+import { User } from 'src/structures/domain/user/user';
 import { UserRepository } from 'src/structures/domain/user/user.repository';
 import { Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
@@ -13,13 +13,13 @@ export class DatabaseUserRepository implements UserRepository {
     private readonly userEntityRepository: Repository<UserEntity>,
   ) {}
 
-  async createUser(user: UserPresenter, password: string): Promise<UserEntity> {
+  async createUser(user: User, password: string): Promise<UserEntity> {
     const entity = this.toUserEntity(user, password);
     const result = await this.userEntityRepository.save(entity, {});
     return result;
   }
 
-  async getUserById(userId: string): Promise<UserPresenter> {
+  async getUserById(userId: string): Promise<User> {
     const entity = await this.userEntityRepository.findOne({
       where: {
         id: userId,
@@ -52,8 +52,8 @@ export class DatabaseUserRepository implements UserRepository {
     );
   }
 
-  private toUser(entity: UserEntity): UserPresenter {
-    const user: UserPresenter = new UserPresenter();
+  private toUser(entity: UserEntity): User {
+    const user: User = new User();
 
     user.id = entity.id;
     user.userName = entity.userName;
@@ -64,7 +64,7 @@ export class DatabaseUserRepository implements UserRepository {
     return user;
   }
 
-  private toUserEntity(user: UserPresenter, password: string): UserEntity {
+  private toUserEntity(user: User, password: string): UserEntity {
     const now = new Date();
     const id = uuid();
     const entity: UserEntity = {
