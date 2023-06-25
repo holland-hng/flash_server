@@ -1,10 +1,10 @@
 import { UserEntity } from 'src/structures/data/user/user.entity';
-import { User } from './user';
+import { UserPresenter } from './user.presenter';
 
 export interface UserRepository {
-  createUser(user: User, password: string): Promise<UserEntity>;
+  createUser(user: UserPresenter, password: string): Promise<UserEntity>;
   getUserByEmail(email: string): Promise<UserEntity>;
-  getUserById(userId: string): Promise<User>;
+  getUserById(userId: string): Promise<UserPresenter>;
   updateLastLogin(userId: string): Promise<void>;
   updateRefreshToken(userId: string, refreshToken: string): Promise<void>;
 }

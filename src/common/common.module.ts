@@ -8,6 +8,11 @@ import { JwtModule } from './jwt/jwt.module';
 import { BcryptModule } from './bcrypt/bcrypt.module';
 import { ExceptionModule } from './exception/exception.module';
 import { LoggerModule } from './logger/logger.module';
+import { JwtStrategy } from './guard/jwt.strategy';
+import { UserRepository } from 'src/structures/domain/user/user.repository';
+import { DatabaseUserRepository } from 'src/structures/data/user/user.repository';
+import { UserEntity } from 'src/structures/data/user/user.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -16,6 +21,15 @@ import { LoggerModule } from './logger/logger.module';
     BcryptModule,
     ExceptionModule,
     LoggerModule,
+    TypeOrmModule.forFeature([UserEntity]),
+  ],
+  providers: [
+    {
+      provide: UserRepository,
+      useClass: DatabaseUserRepository,
+    },
+
+    JwtStrategy,
   ],
   exports: [
     EnvironmentModule,
@@ -23,6 +37,11 @@ import { LoggerModule } from './logger/logger.module';
     BcryptModule,
     ExceptionModule,
     LoggerModule,
+    {
+      provide: UserRepository,
+      useClass: DatabaseUserRepository,
+    },
+    JwtStrategy,
   ],
 })
 export class CommonModule {}

@@ -1,4 +1,4 @@
-import { User } from 'src/structures/domain/user/user';
+import { UserPresenter } from 'src/structures/domain/user/user.presenter';
 import {
   Column,
   CreateDateColumn,
@@ -15,7 +15,7 @@ export enum UserRole {
 }
 
 @Entity()
-export class UserEntity implements User {
+export class UserEntity implements UserPresenter {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

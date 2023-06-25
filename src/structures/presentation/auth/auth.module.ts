@@ -1,19 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
-import { DatabaseUserRepository } from 'src/structures/data/user/user.repository';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from 'src/structures/data/user/user.entity';
-import { UserRepository } from 'src/structures/domain/user/user.repository';
 import { CommonModule } from 'src/common/common.module';
+import { RegisterUseCase } from 'src/structures/domain/auth/register.use_case';
+import { LoginUseCase } from 'src/structures/domain/auth/login.use_case';
 
 @Module({
-  imports: [CommonModule, TypeOrmModule.forFeature([UserEntity])],
+  imports: [CommonModule],
   controllers: [AuthController],
-  providers: [
-    {
-      provide: UserRepository,
-      useClass: DatabaseUserRepository,
-    },
-  ],
+  providers: [RegisterUseCase, LoginUseCase],
 })
 export class AuthModule {}

@@ -6,10 +6,20 @@
     "configurations": [
       {
         "type": "node",
-        "request": "attach",
-        "name": "Attach NestJS WS",
-        "port": 9229,
+        "request": "launch",
+        "name": "Nest Debug",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": [
+          "run",
+          "start:debug",
+          "--",
+          "--inspect-brk"
+        ],
+        "console": "integratedTerminal",
         "restart": true,
+        "protocol": "auto",
+        "port": 9229,
+        "autoAttachChildProcesses": true
       }
     ]
 }
