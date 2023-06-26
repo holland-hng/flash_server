@@ -28,7 +28,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       provide: UserRepository,
       useClass: DatabaseUserRepository,
     },
-
     JwtStrategy,
   ],
   exports: [

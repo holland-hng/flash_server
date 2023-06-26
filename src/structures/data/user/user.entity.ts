@@ -1,4 +1,3 @@
-import { User } from 'src/structures/domain/user/user';
 import {
   Column,
   CreateDateColumn,
@@ -9,13 +8,14 @@ import {
 
 export enum UserRole {
   admin = 'admin',
+  subAdmin = 'subAdmin',
   owner = 'owner',
   staff = 'staff',
   customer = 'customer',
 }
 
 @Entity()
-export class UserEntity implements User {
+export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -23,7 +23,13 @@ export class UserEntity implements User {
   email: string;
 
   @Column('varchar', { nullable: true })
-  userName: string;
+  lastName: string;
+
+  @Column('varchar', { nullable: true })
+  firstName: string;
+
+  @Column('varchar', { nullable: true })
+  address: string;
 
   @Column('varchar', { nullable: true })
   password: string;

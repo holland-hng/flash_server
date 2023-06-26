@@ -6,14 +6,14 @@ import { UserRepository } from '../user/user.repository';
 import { Inject } from '@nestjs/common';
 import { UseCase } from 'src/common/use_case/use_case.interface';
 import { Author } from './auth';
-import { AuthLoginDto } from 'src/structures/data/auth/auth.dto';
+import { AuthDto } from 'src/structures/data/auth/auth.dto';
 
 export class JWTToken {
   token: string;
   refreshToken: string;
 }
 
-export class AuthUseCase implements UseCase<AuthLoginDto, Author> {
+export class AuthUseCase implements UseCase<AuthDto, Author> {
   constructor(
     private readonly envService: EnvironmentService,
     protected readonly jwtService: JwtTokenService,
@@ -22,7 +22,7 @@ export class AuthUseCase implements UseCase<AuthLoginDto, Author> {
     protected readonly userRepository: UserRepository,
   ) {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  execute(data: AuthLoginDto): Promise<Author | null> {
+  execute(data: AuthDto): Promise<Author | null> {
     return null;
   }
 

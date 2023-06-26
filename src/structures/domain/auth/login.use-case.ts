@@ -1,4 +1,4 @@
-import { AuthLoginDto } from 'src/structures/data/auth/auth.dto';
+import { AuthDto } from 'src/structures/data/auth/auth.dto';
 import { UserEntity } from 'src/structures/data/user/user.entity';
 import {
   AccountDoseNotExist,
@@ -8,11 +8,12 @@ import { AuthUseCase } from './auth.use-case';
 
 import { Injectable } from '@nestjs/common';
 import { Author } from './auth';
+import { User } from '../user/user';
 export const UserRepository = Symbol('UserRepository');
 
 @Injectable()
 export class LoginUseCase extends AuthUseCase {
-  async execute(data: AuthLoginDto): Promise<Author> {
+  async execute(data: AuthDto): Promise<Author> {
     const auth = data;
     let userEntity: UserEntity;
     try {
@@ -37,11 +38,11 @@ export class LoginUseCase extends AuthUseCase {
       jwtToken.refreshToken,
     );
 
-    const authSection: Author = {
+    const author: Author = {
       token: jwtToken.token,
       refreshToken: jwtToken.refreshToken,
-      user: userEntity,
+      user: User.fromEntity(userEntity),
     };
-    return authSection;
+    return author;
   }
 }
